@@ -17,7 +17,8 @@ import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
 
 # Data reading
-data=pd.read_csv('C:\\Users\\Amogh Prabhu\\Desktop\\50_startups.csv')
+
+data=pd.read_csv('C:\\Users\\Amogh Prabhu\\Desktop\\ML\\PROFIT PREDICTION\\50_startups.csv')
 # Data preprocessing and Visulization
 
 print(data)
@@ -88,6 +89,7 @@ dectree_reg_mse=mean_squared_error(y_test,dectree_reg_pred)
 dectree_reg_mae = mean_absolute_error(y_test,dectree_reg_pred)
 
 # Lasso regression model
+# Error Term E=square residulals + alpha(abs(slope1)+abs(slope2)+abs(slope3)+..............)
 lasso_reg = Lasso(alpha=0.1)
 lasso_reg.fit(X_train,y_train)
 lasso_reg_pred=lasso_reg.predict(X_test)
@@ -96,6 +98,8 @@ lasso_reg_mse=mean_squared_error(y_test,lasso_reg_pred)
 lasso_reg_mae=mean_absolute_error(y_test,lasso_reg_pred)
 
 # Ridge regression model
+
+# Error Term E=square residulals + alpha(abs(slope1)^2+abs(slope2)^2+abs(slope3)^2+..............)
 ridge_reg=Ridge(alpha = 0.1)
 ridge_reg.fit(X_train,y_train)
 ridge_reg_pred=ridge_reg.predict(X_test)
@@ -104,6 +108,8 @@ ridge_reg_mse=mean_squared_error(y_test,ridge_reg_pred)
 ridge_reg_mae=mean_absolute_error(y_test,ridge_reg_pred)
 
 # Elastic Net regression
+
+# Error Term E=square residulals + alpha((l1_ratio(abs(slope1)+abs(slope2)+abs(slope3)+..............) + (1-l1_ratio)(abs(slope1)^2+abs(slope2)^2+abs(slope3)^2+..............)
 elasticnet_reg=ElasticNet(alpha=0.1,l1_ratio=0.5) # lasso+ ridge
 elasticnet_reg.fit(X_train,y_train)
 elasticnet_reg_pred=elasticnet_reg.predict(X_test)
@@ -140,12 +146,11 @@ fnn_model = tf.keras.models.Sequential([
     tf.keras.layers.Dense(1)
 ])
 fnn_model.compile(optimizer= 'adam' , loss = 'mean_squared_error')
-fnn_model.fit(X_train_scaled,y_train,epochs = 10,batch_size = 32)
+fnn_model.fit(X_train_scaled,y_train,epochs = 100,batch_size = 32)
 fnn_predict = fnn_model.predict(X_test_scaled)
 fnn_r2 = r2_score(y_test,fnn_predict)
 fnn_mse= mean_squared_error(y_test,fnn_predict)
 fnn_mae = mean_absolute_error(y_test,fnn_predict)
-
 
 # finding BEST MODEL
 result = pd.DataFrame({
@@ -171,6 +176,6 @@ print("BEST model Based on Total Rank: " , best_model_rank)
 rd_spend = float(input("Enter R & D spend : "))
 admin = float(input("Enter Administration Cost: "))
 market= float(input("Enter Markenting Expenditure :"))
-## we will select based on best model
-# print("The predicted value of startup is:",float(lasso_reg.predict([[rd_spend,admin,market]])))
-# print("The predicted value of startup is:",float(randfor_reg.predict([[rd_spend,admin,market]])))
+# we will select based on best model
+print("The predicted value of startup is:",float(lasso_reg.predict([[rd_spend,admin,market]])))
+print("The predicted value of startup is:",float(randfor_reg.predict([[rd_spend,admin,market]])))
